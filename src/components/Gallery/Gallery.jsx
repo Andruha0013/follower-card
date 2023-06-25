@@ -77,41 +77,49 @@ export default class Gallery extends Component {
 		}
 	}
 	//--------------------------------------------------------------
-	toogleFollower = (id) => {
+	toogleFollower = async (id) => {
 		let followList = followingStor.getData();
 		if (followList) {
 			const indexfollower = followList.findIndex((element) => {
 				return element.id === id;
 			});
 			let list = this.state.items;
+			let itemIndex;
 			//---------have-such-id-in-local--dell-----
 			if (indexfollower >= 0) {
 				followList = followList.filter((element) => {
 					console.log(element.id);
 					return element.id !== id;
 				});
-				list = this.state.items.map((item) => {
+				list = this.state.items.map((item, index) => {
 					if (item.id === id) {
 						item.follow = false;
+						itemIndex = index;
+						item.followers--;
 					}
 					return item;
 				});
 			} //---------have-not-such-id-in-local--add-----
 			else {
 				followList.push({ id: id });
-				list = this.state.items.map((item) => {
+				list = this.state.items.map((item, index) => {
 					if (item.id === id) {
 						item.follow = true;
+						itemIndex = index;
+						item.followers++;
 					}
 					return item;
 				});
 			}
+			console.log(list[itemIndex].followers);
+			await instance.put(`followers/${id}`, {
+				followers: list[itemIndex].followers,
+			});
 			followingStor.setData(followList);
 			this.setState({ items: list });
 		}
 	};
 	//--------------------------------------------------------------
-	loadMore = async (prevList) => {};
 
 	nextPage = () => {
 		let x = this.state.currentPage + 1;

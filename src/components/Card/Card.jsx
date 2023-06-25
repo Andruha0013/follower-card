@@ -1,15 +1,14 @@
 import css from "./Card.module.css";
-//import { useState } from "react";
 import icons from "../../images/icons.svg";
+import convertNum from "../../helpers/conveNumber";
 const headerImg = require("../../images/picture2 1.png");
 const defAvatar = require("../../images/Hansel.png");
 
 export default function Card(props) {
 	const { item, btnFunc } = props;
 
-	//console.log(follow);
 	return (
-		<li key={item.id} data-id={item.id.toString()} className={css.card}>
+		<li key={item.id} className={css.card}>
 			<svg width="76" height="22" className={css.logo}>
 				<use href={icons + "#icon-GoIt-logo"}></use>
 			</svg>
@@ -23,13 +22,14 @@ export default function Card(props) {
 			</div>
 			<ul className={css.cardInfo}>
 				<li className="cardInfo_item">{item.tweets} tweets</li>
-				<li className="cardInfo_item">100,500 Followers</li>
+				<li className="cardInfo_item">
+					{convertNum(item.followers)} Followers
+				</li>
 			</ul>
 			<button
 				className={item.follow ? css.follow_btn__following : css.follow_btn}
 				value={item.id}
-				onClick={(evt) => {
-					console.log("click");
+				onClick={async (evt) => {
 					btnFunc(evt.currentTarget.value);
 				}}
 			>

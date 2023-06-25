@@ -1,12 +1,10 @@
 import "./App.css";
-import Card from "./components/Card/Card";
+import Gallery from "./components/Gallery/Gallery";
 
 function App() {
 	return (
 		<div className="App">
-			<ul className="list">
-				<Card />
-			</ul>
+			<Gallery />
 		</div>
 	);
 }

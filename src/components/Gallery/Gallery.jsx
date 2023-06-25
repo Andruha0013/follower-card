@@ -103,7 +103,6 @@ export default class Gallery extends Component {
 					return item;
 				});
 			}
-			console.log(list[itemIndex].followers);
 			await updateFollowers(id, list[itemIndex].followers);
 			followingStor.setData(followList);
 			this.setState({ items: list });

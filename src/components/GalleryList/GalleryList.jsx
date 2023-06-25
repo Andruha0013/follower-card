@@ -1,5 +1,6 @@
 import css from "./GalleryList.module.css";
 import Card from "../Card/Card";
+import PropTypes from "prop-types";
 
 export default function GalleryList({ items, func }) {
 	return (
@@ -10,3 +11,8 @@ export default function GalleryList({ items, func }) {
 		</ul>
 	);
 }
+
+GalleryList.prototypes = {
+	items: PropTypes.array,
+	func: PropTypes.func,
+};

@@ -1,4 +1,5 @@
 import css from "./Card.module.css";
+import PropTypes from "prop-types";
 import icons from "../../images/icons.svg";
 import convertNum from "../../helpers/conveNumber";
 const headerImg = require("../../images/picture2 1.png");
@@ -38,3 +39,8 @@ export default function Card(props) {
 		</li>
 	);
 }
+
+Card.propTypes = {
+	item: PropTypes.object,
+	btnFunc: PropTypes.func,
+};

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { getAll, updateFollowers } from "../../helpers/mockApiApp";
 import LocalStorApp from "../../helpers/LocalStoregeApp";
 import GalleryList from "../GalleryList/GalleryList";
 
@@ -7,15 +7,11 @@ import css from "./Gallery.module.css";
 
 const followingStor = new LocalStorApp("follow");
 
-const instance = axios.create({
-	baseURL: "https://643062afc26d69edc890e903.mockapi.io/",
-	headers: { "content-type": "application/json" },
-});
-
 export default class Gallery extends Component {
 	state = {
 		items: [],
 		currentPage: 1,
+		limit: 3,
 		isLoading: false,
 		error: null,
 	};
@@ -26,10 +22,7 @@ export default class Gallery extends Component {
 			followingStor.setData([]);
 		}
 
-		const response = await instance.get(
-			`followers?page=${this.state.currentPage}&limit=3`
-		);
-		console.log(response);
+		const response = await getAll(this.state.currentPage, this.state.limit);
 
 		if (followList) {
 			const list = response.data.map((item) => {
@@ -51,9 +44,8 @@ export default class Gallery extends Component {
 	async componentDidUpdate(prevProps, prevState) {
 		if (prevState.currentPage !== this.state.currentPage) {
 			console.log("update");
-			const response = await instance.get(
-				`followers?page=${this.state.currentPage}&limit=3`
-			);
+			const response = await getAll(this.state.currentPage, this.state.limit);
+
 			const prevList = prevState.items.concat(response.data);
 			console.log(prevList);
 			console.log(response.data);
@@ -112,9 +104,7 @@ export default class Gallery extends Component {
 				});
 			}
 			console.log(list[itemIndex].followers);
-			await instance.put(`followers/${id}`, {
-				followers: list[itemIndex].followers,
-			});
+			await updateFollowers(id, list[itemIndex].followers);
 			followingStor.setData(followList);
 			this.setState({ items: list });
 		}
@@ -131,7 +121,9 @@ export default class Gallery extends Component {
 		return (
 			<div className={css.gallery}>
 				<GalleryList items={items} func={this.toogleFollower}></GalleryList>
-				<button onClick={this.nextPage}>Load more</button>
+				<button className={css.gallery__loadMore_btn} onClick={this.nextPage}>
+					Load more
+				</button>
 			</div>
 		);
 	}
